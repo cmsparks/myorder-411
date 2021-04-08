@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>My Orders</title>
+    <script>
+      function getAllOrders() {
+        userid = document.getElementById('userid').value;
+        fetch('user/'+userid+'/orders')
+          .then(response => response.json())
+          .then(data => fillOrdersList(data.orders))
+      }
+
+      function fillOrdersList(data) {
+        orderslist = document.getElementById('orderslist')
+        orderslist.innerHTML = ''
+        for(let i in data) {
+          orderslist.innerHTML += `
+            <div>
+              <h3>${data[i].item_name} - ${data[i].restaurant_name}</h3>
+              <ul>
+                <li>Price: ${data[i].item_price}</li>
+                <li>Description: ${data[i].item_desc}</li>
+              </ul>
+            </div>
+          `;
+        }
+      }
+    </script>
+</head>
+  <body>
+    <h1>My Orders</h1>
+    User ID: <input id="userid" type="text">
+    <button onclick="getAllOrders()">Get Orders</button>
+    <div id="orderslist">
+    </div>
+  </body>
+</html>
