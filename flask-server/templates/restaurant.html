@@ -8,8 +8,8 @@
     <title>My Orders</title>
     <script>
       function getRestaurant() {
-        userid = document.getElementById('rid').value;
-        fetch('user/'+userid+'/orders')
+        rid = document.getElementById('rid').value;
+        fetch('/findRestaurant/'+rid)
           .then(response => response.json())
           .then(data => fillRInfo(data.restaurant))
       }
@@ -35,7 +35,7 @@
 </head>
   <body>
     <h1>My Orders</h1>
-    User ID: <input id="rid" type="text">
+    Restaurant ID: <input id="rid" type="text">
     <button onclick="getRestaurant()">Get Restaurant Info</button>
     <div id="rInfo">
     </div>
