@@ -11,10 +11,10 @@
         userid = document.getElementById('userid').value;
         fetch('user/'+userid+'/orders')
           .then(response => response.json())
-          .then(data => fillOrdersList(data.orders))
+          .then(data => fillOrdersList(userid, data.orders))
       }
 
-      function fillOrdersList(data) {
+      function fillOrdersList(userid, data) {
         orderslist = document.getElementById('orderslist')
         orderslist.innerHTML = ''
         for(let i in data) {
@@ -25,16 +25,37 @@
                 <li>Price: ${data[i].item_price}</li>
                 <li>Description: ${data[i].item_desc}</li>
               </ul>
+              <button onclick="deleteOrderPref(${userid}, ${data[i].restaurant_id},  '${data[i].item_name}')">
+                Delete
+              </button>
             </div>
           `;
         }
+      }
+
+      function deleteOrderPref(user_id, restaurant_id, item_name) {
+        fetch('user/'+user_id+'/orders/'+restaurant_id+'+'+item_name, {
+          method: 'DELETE'
+        }).then(() => getAllOrders());
+      }
+
+      function createOrderPref() {
+        userid = document.getElementById('userid').value;
+        restaurantid = document.getElementById('restaurantid').value;
+        itemname = document.getElementById('itemname').value;
+        fetch('user/'+userid+'/orders/'+restaurantid+'+'+itemname, {
+          method: 'CREATE'
+        }).then(() => getAllOrders());
       }
     </script>
 </head>
   <body>
     <h1>My Orders</h1>
     User ID: <input id="userid" type="text">
-    <button onclick="getAllOrders()">Get Orders</button>
+    <button onclick="getAllOrders()">Get Order Preferences</button>
+    Restaurant ID: <input id="restaurantid" type="text">
+    Item Name: <input id="itemname" type="text">
+    <button onclick="createOrderPref()">Create Order Preference</button>
     <div id="orderslist">
     </div>
   </body>
