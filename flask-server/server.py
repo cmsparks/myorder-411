@@ -1,4 +1,13 @@
 from flask import (Flask, render_template, jsonify)
+import mysql.connector
+mydb = mysql.connector.connect(
+    host= "34.67.0.57",
+    user= "root",
+    password= "1234",
+    database = "one_data"
+)
+
+mycursor = mydb.cursor(buffered=True)
 
 app = Flask(__name__)
  
@@ -45,5 +54,29 @@ def api_user_orders(user_id):
 @app.route('/apitest', methods=['GET'])
 def api_test():
     return "This is a test"
+
+@app.route('/orders', methods=['GET'])
+def serve_orders_index():
+    return render_template("restaurant.html", flask_token="Hello   world")
+
+@app.route('/findRestaurant/<restaurant_id>', methods=['GET'])
+def findRestaurant(restaurant_id):
+    query = """SELECT r.restaurant_name, r.location, r.rating, r.website, r.food_types
+               FROM Restaurant r
+                WHERE r.restaurant_id = %s"""
+    params = (str(restaurant_id))
+    mycursor.execute(query, params)
+
+    restaurant = []
+    for (restaurant_name, location, rating, website, food_types) in mycursor:
+        restaurant.append({
+            'location': location,
+            'rating': rating,
+            'website': website,
+            'restaurant_name': restaurant_name,
+            'food_types': food_types
+        })
+    return jsonify({'restaurant':restaurant})
+
 
 app.run(host='0.0.0.0',port=8080)
