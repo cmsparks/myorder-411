@@ -1,19 +1,9 @@
 from flask import (Flask, render_template, jsonify)
-import mysql.connector
-mydb = mysql.connector.connect(
-    host= "34.67.0.57",
-    user= "root",
-    password= "1234",
-    database = "one_data"
-)
-
-mycursor = mydb.cursor(buffered=True)
 
 app = Flask(__name__)
- 
+
 import mysql.connector
-import random
-mydb = mysql.connector.connect (
+mydb = mysql.connector.connect(
     host= "34.67.0.57",
     user= "root",
     password= "1234",
