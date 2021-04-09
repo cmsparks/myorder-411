@@ -31,6 +31,31 @@
           `;
         }
       }
+
+      function makeRestaurant() {
+        crid = document.getElementById('crid').value;
+        rloc = document.getElementById('rloc').value;
+        rname = document.getElementById('rname').value;
+        rrate = document.getElementById('rrate').value;
+        rcuis = document.getElementById('rcuis').value;
+        rsite = document.getElementById('rsite').value;
+        data = {
+            "crid": crid,
+            "rloc": rloc,
+            "rname": rname,
+            "rrate": rrate,
+            "rcuis": rcuis,
+            "rsite": rsite
+        }
+
+        fetch('/newRestaurant', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+      }
     </script>
 </head>
   <body>
@@ -39,5 +64,14 @@
     <button onclick="getRestaurant()">Get Restaurant Info</button>
     <div id="rInfo">
     </div>
+    <h1>Create new restaurant</h1>
+    Restaurant ID: <input id="crid" type="text">
+    Restaurant Name: <input id="rname" type="text">
+    Restaurant Location: <input id="rloc" type="text">
+    Restaurant Rating: <input id="rrate" type="text">
+    Restaurant Website: <input id="rsite" type="text">
+    Restaurant Cuisine <input id="rcuis" type="text">
+
+    <button onclick="makeRestaurant()">Get Restaurant Info</button>
   </body>
 </html>
