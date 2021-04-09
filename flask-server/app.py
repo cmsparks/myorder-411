@@ -46,7 +46,7 @@ def api_test():
     return "This is a test"
 
 @app.route('/restaurant', methods=['GET'])
-def serve_orders_index():
+def serve_rest_index():
     return render_template("restaurant.html", flask_token="Hello   world")
 
 @app.route('/findRestaurant/<restaurant_id>', methods=['GET'])
