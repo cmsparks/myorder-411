@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>My Orders</title>
+    <script>
+      function getRestaurant() {
+        userid = document.getElementById('rid').value;
+        fetch('user/'+userid+'/orders')
+          .then(response => response.json())
+          .then(data => fillRInfo(data.restaurant))
+      }
+
+      function fillRInfo(data) {
+        orderslist = document.getElementById('rInfo')
+        orderslist.innerHTML = ''
+        for(let i in data) {
+          orderslist.innerHTML += `
+            <div>
+              <h3>${data[i].restaurant_name}</h3>
+              <ul>
+                <li>Location: ${data[i].location}</li>
+                <li>Rating: ${data[i].rating}</li>
+                <li>Cuisine: ${data[i].food_types}</li>
+                <li>Website: ${data[i].website}</li>
+              </ul>
+            </div>
+          `;
+        }
+      }
+    </script>
+</head>
+  <body>
+    <h1>My Orders</h1>
+    User ID: <input id="rid" type="text">
+    <button onclick="getRestaurant()">Get Restaurant Info</button>
+    <div id="rInfo">
+    </div>
+  </body>
+</html>
