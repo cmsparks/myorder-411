@@ -1,5 +1,5 @@
 from __main__ import (app)
-import db
+from . import db
 from flask import (jsonify)
 import json
 

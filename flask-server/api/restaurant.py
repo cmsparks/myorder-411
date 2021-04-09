@@ -1,5 +1,5 @@
 from __main__ import (app)
-import db
+from . import db
 from flask import (jsonify, request)
 
 # Get all of a user's order preferences
@@ -13,7 +13,7 @@ def findRestaurant(restaurant_id):
     mycursor.execute(query, params)
 
     restaurant = []
-    for (restaurant_name, location, rating, website, food_types) in cursor:
+    for (restaurant_name, location, rating, website, food_types) in mycursor:
         restaurant.append({
             'location': location,
             'rating': rating,
