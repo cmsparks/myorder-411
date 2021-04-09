@@ -45,10 +45,6 @@ def api_user_orders(user_id):
 def api_test():
     return "This is a test"
 
-@app.route('/orders', methods=['GET'])
-def serve_orders_index():
-    return render_template("restaurant.html", flask_token="Hello   world")
-
 @app.route('/findRestaurant/<restaurant_id>', methods=['GET'])
 def findRestaurant(restaurant_id):
     query = """SELECT r.restaurant_name, r.location, r.rating, r.website, r.food_types
