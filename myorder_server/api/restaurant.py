@@ -1,11 +1,11 @@
-from __main__ import (app)
-from . import db
+from myorder_server import app
+from .db import (db_acq_lock, db_rel_lock)
 from flask import (jsonify, request)
 
 # Get all of a user's order preferences
 @app.route('/findRestaurant/<restaurant_id>', methods=['GET'])
 def findRestaurant(restaurant_id):
-    conn, mycursor = db.db_conn()
+    conn, mycursor = db_acq_lock()
     query = """SELECT r.restaurant_name, r.location, r.rating, r.website, r.food_types
                FROM Restaurant r
                 WHERE r.restaurant_id = %s"""
@@ -22,13 +22,13 @@ def findRestaurant(restaurant_id):
             'food_types': food_types
         })
     
-    mycursor.close()
-    conn.close()
+    db_rel_lock()
+
     return jsonify({'restaurant':restaurant})
 
 @app.route('/newRestaurant', methods=['POST'])
 def createRestaurant():
-    conn, mycursor = db.db_conn()
+    conn, mycursor = db_acq_lock()
     print("hellooo")
     data = request.json;
     print(data)
@@ -49,5 +49,7 @@ def createRestaurant():
     #         'food_types': food_types
     #     })
     # return jsonify({'restaurant':restaurant})
+    conn.commit()
+    db_rel_lock()
     print("done")
     return "Done!!"
