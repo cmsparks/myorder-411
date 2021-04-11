@@ -13,4 +13,13 @@ def serve_rest_index():
 def serve_orders_index():
     return render_template("orders.html", flask_token="Hello   world")
 
-from myorder_server.api import db, orders, restaurant
+@app.route('/users', methods=['GET'])
+def get_user():
+    return render_template("users.html", flask_token="tok")
+
+@app.route('/stats', methods=['GET'])
+def get_stats():
+    return render_template("stats.html", flask_token = "tok")
+
+
+from myorder_server.api import db, orders, restaurant, stats, user

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>Stats</title>
+    <script type="text/javascript">
+        var done = 0;
+        function appendData(data) {
+            var mainContainer = document.getElementById("myData");
+            for (var i = 0; i < 10; i++) {
+                var div = document.createElement("div");
+                div.innerHTML = 'Location: ' + data.locations[i].location;
+                div.innerHTML += '<br>';
+                div.innerHTML += 'Average Rating: ' + data.locations[i].rating;
+                mainContainer.appendChild(div);
+            }
+        }
+        function removeData() {
+            document.getElementById("myData").remove();
+        }
+        function getLocationStats() {
+            if (!done) {
+                done = 1
+                fetch('/stats/get')
+                    .then(response => response.json())
+                    .then(data => appendData(data))
+            } else {
+                removeData()
+                done = 0;
+            }
+        }
+    </script>
+</head>
+  <body>
+      <h1>General Statistics</h1>
+      <style>
+        button {
+            color:rgb(255, 255, 255);
+            background-color: rgb(238, 164, 164);
+        }
+      </style>
+    <button onclick="getLocationStats()" style=>Average Rating by Location</button>
+    <div id="myData"></div>
+  </body>
+</html>

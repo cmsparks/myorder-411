@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>Stats</title>
+    <script type="text/javascript">
+        var getFriendShowing = 0;
+        var UID = 0;
+        var user_attributes = []
+        var attribute_index = 0
+        var user_prompts = ["username", "email", "password", "name", "tags"]
+        function addFriendData(data) {
+            var mainContainer = document.getElementById("freinds");
+            var div = document.createElement("div");
+            div.innerHTML = 'ID: ' + data.users[0].user_id;
+            div.innerHTML += '<br>'
+            div.innerHTML += 'NAME: ' + data.users[0].full_name;
+            div.innerHTML += '<br>'
+            div.innerHTML += 'USERNAME: ' + data.users[0].username;
+            div.innerHTML += '<br>'
+            div.innerHTML += 'EMAIL: ' + data.users[0].email;
+            div.innerHTML += '<br>'
+            div.innerHTML += 'Tags: ' + data.users[0].tags;
+            div.innerHTML += '<br>'
+            mainContainer.appendChild(div);
+        }
+        function removeFriendData() {
+          document.getElementById( 'freinds' ).getElementsByTagName( 'div' )[0].remove();
+        }
+        
+        function createUser() {
+            console.log("IN Create User");
+            fetch('/users/create/' + user_attributes[0] + '/' + user_attributes[1] + '/' + user_attributes[2] + '/' + user_attributes[3] + '/' + user_attributes[4], {method:'POST'})
+              .then(response => response.json())
+            return false;
+        }
+
+        function update_new_user_info(info) {
+          console.log("UPDATING INFO")
+          attribute_index += 1
+          inf = document.getElementById(info).value;
+          var mainContainer = document.getElementById("user_attributes");
+          var div = document.createElement("div");
+          div.innerHTML = user_prompts[attribute_index];
+          mainContainer.appendChild(div);
+          console.log(inf)
+          user_attributes.push(inf)
+          return false;
+        }
+
+        function deleteUser(UIDD) {
+            console.log("IN DELETUSER");
+            id = document.getElementById(UIDD).value;
+            fetch('/users/delete/' + id, {method:'POST'})
+              .then(response => response.json())
+            return false;
+        }
+
+        function updateUser(uTags) {
+          console.log("IN updateUser");
+          t = document.getElementById(uTags).value;
+          fetch('/users/update/' + id + '/' + String(t), {method:'POST'})
+             .then(response => response.json())
+          return false;
+        }
+        
+        //https://stackoverflow.com/questions/22116017/how-to-pass-a-user-entered-form-value-from-html-to-javascript
+        function getFriendUser (userID) {
+            id = document.getElementById(userID).value;
+              fetch('/users/freinds/' + id)
+                  .then(response => response.json())
+                  .then(data => addFriendData(data))
+            return false;
+        }
+        function userToEdit (UIDD) {
+          id = document.getElementById(UIDD).value;
+          console.log(id);
+            UID = id;
+            return false;
+        }
+
+
+    </script>
+</head>
+  <body>
+      <h1>User</h1>
+      <style>
+        .column {
+          float: left;
+          width: 25%;
+        }
+      </style>
+
+  <div class="row">
+    <div class="column">
+      <div class="entry foreground-color">
+        <h3>Freind Info</h3>
+        <form onsubmit="return getFriendUser('userID')">
+            <input type="text" name="userID" size="25" id="userID"/>
+        </form>
+        <button onclick="removeFriendData()" style=>Clear Freind Search</button>
+        <div id="freinds"></div>
+    </div>
+    </div>
+    <div class="column">
+      <div class="entry foreground-color">
+        <h3>Update User ID</h3>
+        <form onsubmit="return userToEdit('UIDD')">
+            <input type="text" name="UIDD" size="25" id="UIDD"/>
+        </form>
+      </div>
+      <div class="entry foreground-color">
+        <h3>Update Tags</h3>
+        <form onsubmit="return updateUser('uTags')">
+            <input type="text" name="uTags" size="25" id="uTags"/>
+        </form>
+      </div>
+    </div>
+    <div class="column"> 
+      <div class="entry foreground-color">
+        <h3>Delete User</h3>
+        <form onsubmit="return deleteUser('UIDDD')">
+            <input type="text" name="UIDDD" size="25" id="UIDDD"/>
+        </form>
+      </div>
+    </div>
+
+    <div class="column"> 
+      <div class="entry foreground-color">
+        <h3>Create User</h3>
+        <div id="user_attributes"></div>
+        <form onsubmit="return update_new_user_info('info')">
+            <input type="text" name="info" size="25" id="info"/>
+        </form>
+        <button onclick="createUser()" style=>Create New User</button>
+      </div>
+    </div>
+  </div>
+  
+  </body>
+</html>
+
