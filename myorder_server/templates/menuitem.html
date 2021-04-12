@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>Menu Items</title>
+    <script>
+      function getAllMenuItems() {
+        restaurant_id = document.getElementById('restaurant_id').value;
+        
+        fetch('menuitem/'+restaurant_id+'/menu')
+          .then(response => response.json())
+          .then(data => fillMenu(restaurant_id, data.menu))
+      }
+
+      function fillMenu(restaurant_id, data) {
+        menu_list = document.getElementById('menulist')
+        menu_list.innerHTML = `<h2>${data[i].restaurant_name}</h2>`
+        
+        for(let i in data) {
+          menu_list.innerHTML += `
+            <div>
+              <h3>${data[i].item_name}</h3>
+              <ul>
+                <li>Price: ${data[i].item_price}</li>
+                <li>Description: ${data[i].item_desc}</li>
+              </ul>
+              <button onclick="deleteOrderPref(${data[i].restaurant_id},  '${data[i].item_name}')">
+                Delete
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      function deleteMenuItem(restaurant_id, item_name) {
+        fetch('menuitem/'+'+'+restaurant_id+'+'+item_name, {
+          method: 'DELETE'
+        }).then(() => getAllMenuItems());
+      }
+
+      function createMenuItem() {
+        restaurant_id = document.getElementById('restaurant_id').value;
+        itemname = document.getElementById('itemname').value;
+        itemprice = document.getElementById('itemprice').value;
+        itemname = document.getElementById('itemdescription').value;
+        fetch('menuitem/'+'+'+restaurant_id+'+'+itemname+'+'+itemprice+'+'+itemdescription, {
+          method: 'CREATE'
+        }).then(() => getAllMenuItems());
+      }
+    </script>
+</head>
+  <body>
+    <h1>Menu Items</h1>
+    Restaurant ID: <input id="restaurant_id" type="text">
+    <button onclick="getAllMenuItems()">Get Menu</button>
+    Item Name: <input id="itemname" type="text">
+    Price: <input id="itemprice" type="text">
+    Description: <input id="itemdescription" type="text">
+    <button onclick="createOrderPref()">Create Order Preference</button>
+    <div id="menulist">
+      
+    </div>
+  </body>
+</html>
