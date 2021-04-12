@@ -7,6 +7,25 @@
     <meta name="theme-color" content="#000000"/>
     <title>My Orders</title>
     <script>
+      function getTopOrderers() {
+        fetch('user/orders/top')
+          .then(response => response.json())
+          .then(data => fillTopOrders(data.top))
+      }
+
+      function fillTopOrders(data) {
+        console.log(data)
+        orderslist = document.getElementById('toplist')
+        orderslist.innerHTML = ''
+        for(let i in data) {
+          orderslist.innerHTML += `
+            <p>
+            ${data[i].username} (${data[i].uid}) - ${data[i].num_orders} orders
+            </p>
+          `;
+        }
+      }
+      
       function getAllOrders() {
         userid = document.getElementById('userid').value;
         fetch('user/'+userid+'/orders')
@@ -18,19 +37,34 @@
         orderslist = document.getElementById('orderslist')
         orderslist.innerHTML = ''
         for(let i in data) {
+          if(data[i].notes === null) {
+            data[i].notes = '';
+          }
           orderslist.innerHTML += `
             <div>
               <h3>${data[i].item_name} - ${data[i].restaurant_name}</h3>
               <ul>
                 <li>Price: ${data[i].item_price}</li>
                 <li>Description: ${data[i].item_desc}</li>
+                <li>Notes: <textarea id="notesarea-${i}">${data[i].notes}</textarea></li>
               </ul>
               <button onclick="deleteOrderPref(${userid}, ${data[i].restaurant_id},  '${data[i].item_name}')">
                 Delete
               </button>
+            <button onclick="updateOrderPref(${userid}, ${data[i].restaurant_id},  '${data[i].item_name}', ${i})">
+                Update Notes
+              </button>
             </div>
           `;
         }
+      }
+      
+      function updateOrderPref(user_id, restaurant_id, item_name, i) {
+        notes = document.getElementById('notesarea-'+i).value;
+        fetch('user/'+user_id+'/orders/'+restaurant_id+'+'+item_name, {
+          method: 'PUT',
+          body: notes
+        }).then(() => getAllOrders());
       }
 
       function deleteOrderPref(user_id, restaurant_id, item_name) {
@@ -43,8 +77,10 @@
         userid = document.getElementById('userid').value;
         restaurantid = document.getElementById('restaurantid').value;
         itemname = document.getElementById('itemname').value;
+        notes = document.getElementById('notes').value;
         fetch('user/'+userid+'/orders/'+restaurantid+'+'+itemname, {
-          method: 'CREATE'
+          method: 'CREATE',
+          body: notes
         }).then(() => getAllOrders());
       }
     </script>
@@ -55,9 +91,16 @@
     <button onclick="getAllOrders()">Get Order Preferences</button>
     Restaurant ID: <input id="restaurantid" type="text">
     Item Name: <input id="itemname" type="text">
+    Notes: <textarea id="notes"></textarea>
     <button onclick="createOrderPref()">Create Order Preference</button>
     <div id="orderslist">
       
+    </div>
+    <br>
+    <hr>
+    <br>
+    <button onclick="getTopOrderers()">Get Top Orderers</button>
+    <div id="toplist">
     </div>
   </body>
 </html>
