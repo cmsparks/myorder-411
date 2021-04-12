@@ -56,3 +56,33 @@ def api_delete_menu_item(restaurant_id, item_name):
     db_rel_lock()
 
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route('/restaurant/<restaurant_id>/avgprice', methods=['GET'])
+def api_calculate_restaurant_avgprice(restaurant_id):
+    conn, cursor = db_acq_lock()
+
+    query = """SELECT r.restaurant_id, AVG(mi.item_price) as avgItemPrice
+                FROM Restaurant r JOIN MenuItem mi on r.restaurant_id = mi.restaurant_id
+                GROUP BY r.restaurant_id
+                ORDER BY avgItemPrice DESC, r.restaurant_id ASC"""
+    # params = (restaurant_id)
+    cursor.execute(query)
+    avgprices = {
+        "list": []
+    }
+
+    for info in cursor:
+        print(info)
+        avgprices["list"].append({
+            "rid": info[0],
+            "avgprice": info[1]
+        })
+
+    # for (restaurant_name, avgItemPrice) in cursor:
+    #     avgprice.append({
+    #         'restaurant_name': restaurant_name,
+    #         'avgprice': avgItemPrice
+    #     })
+
+    db_rel_lock()
+    return jsonify({'avgprices':avgprices})
