@@ -25,4 +25,4 @@ def get_stats():
 def get_menu():
     return render_template("menuitem.html")
 
-from myorder_server.api import db, orders, restaurant, stats, user
+from myorder_server.api import db, orders, restaurant, stats, user, menuitem
