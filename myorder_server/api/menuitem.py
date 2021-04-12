@@ -26,7 +26,7 @@ def api_get_restaurant_menu(restaurant_id):
     db_rel_lock()
     return jsonify({'menuitems':menuitems})
 
-# Create a new order preference
+# Create a menu item
 @app.route('/menuitem/<restaurant_id>+<item_name>+<item_price>+<item_desc>', methods=['CREATE'])
 def api_create_menu_item(restaurant_id, item_name, item_price, item_desc):
     # print("\n\n\nGIMME NEW MENU ITEM\n\n\n")
@@ -42,7 +42,25 @@ def api_create_menu_item(restaurant_id, item_name, item_price, item_desc):
 
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
-# Delete a new order preference
+# Update a menu item
+@app.route('/menuitem/<restaurant_id>+<item_name>+<item_price>+<item_desc>', methods=['PUT'])
+def api_update_menu_item(restaurant_id, item_name, item_price, item_desc):
+    conn, cursor = db_acq_lock()
+    
+    query = """UPDATE MenuItem
+                SET item_price = %s,
+                    item_desc = %s
+                WHERE (restaurant_id = %s AND item_name = %s)"""
+    params = (item_price, item_desc, restaurant_id, item_name)
+    cursor.execute(query, params) 
+    
+    conn.commit() 
+    db_rel_lock()
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+
+# Delete a menu item
 @app.route('/menuitem/<restaurant_id>+<item_name>', methods=['DELETE'])
 def api_delete_menu_item(restaurant_id, item_name):
     conn, cursor = db_acq_lock()
@@ -57,6 +75,7 @@ def api_delete_menu_item(restaurant_id, item_name):
 
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
+# Get the avg price of restaurants
 @app.route('/restaurant/<restaurant_id>/avgprice', methods=['GET'])
 def api_calculate_restaurant_avgprice(restaurant_id):
     conn, cursor = db_acq_lock()

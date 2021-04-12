@@ -28,6 +28,17 @@
           .then(data => fillMenu(restaurant_id, data.menuitems))
       }
 
+      //UPDATE
+      function updateMenuItem() {
+        restaurant_id = document.getElementById('restaurant_id').value;
+        itemname = document.getElementById('itemname2').value;
+        itemprice = document.getElementById('itemprice2').value;
+        itemdescription = document.getElementById('itemdescription2').value;
+        fetch('menuitem/'+restaurant_id+'+'+itemname+'+'+itemprice+'+'+itemdescription, {
+          method: 'PUT',
+        }).then(() => getAllMenuItems());
+      }
+
       //DELETE
       function deleteMenuItem(restaurant_id, item_name) {
         fetch('menuitem/'+restaurant_id+'+'+item_name, {
