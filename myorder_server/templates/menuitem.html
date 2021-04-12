@@ -12,12 +12,12 @@
         
         fetch('menuitem/'+restaurant_id+'/menu')
           .then(response => response.json())
-          .then(data => fillMenu(restaurant_id, data.menu))
+          .then(data => fillMenu(restaurant_id, data.menuitems))
       }
 
       function fillMenu(restaurant_id, data) {
         menu_list = document.getElementById('menulist')
-        menu_list.innerHTML = `<h2>${data[i].restaurant_name}</h2>`
+        menu_list.innerHTML = `<h2>${data[0].restaurant_name}</h2>`
         
         for(let i in data) {
           menu_list.innerHTML += `
@@ -27,7 +27,7 @@
                 <li>Price: ${data[i].item_price}</li>
                 <li>Description: ${data[i].item_desc}</li>
               </ul>
-              <button onclick="deleteOrderPref(${data[i].restaurant_id},  '${data[i].item_name}')">
+              <button onclick="deleteMenuItem(${data[i].restaurant_id},  '${data[i].item_name}')">
                 Delete
               </button>
             </div>
@@ -36,7 +36,7 @@
       }
 
       function deleteMenuItem(restaurant_id, item_name) {
-        fetch('menuitem/'+'+'+restaurant_id+'+'+item_name, {
+        fetch('menuitem/'+restaurant_id+'+'+item_name, {
           method: 'DELETE'
         }).then(() => getAllMenuItems());
       }
@@ -45,9 +45,9 @@
         restaurant_id = document.getElementById('restaurant_id').value;
         itemname = document.getElementById('itemname').value;
         itemprice = document.getElementById('itemprice').value;
-        itemname = document.getElementById('itemdescription').value;
-        fetch('menuitem/'+'+'+restaurant_id+'+'+itemname+'+'+itemprice+'+'+itemdescription, {
-          method: 'CREATE'
+        itemdescription = document.getElementById('itemdescription').value;
+        fetch('menuitem/'+restaurant_id+'+'+itemname+'+'+itemprice+'+'+itemdescription, {
+          method: 'CREATE',
         }).then(() => getAllMenuItems());
       }
     </script>
@@ -59,7 +59,7 @@
     Item Name: <input id="itemname" type="text">
     Price: <input id="itemprice" type="text">
     Description: <input id="itemdescription" type="text">
-    <button onclick="createOrderPref()">Create Order Preference</button>
+    <button onclick="createMenuItem()">Create Menu Item</button>
     <div id="menulist">
       
     </div>

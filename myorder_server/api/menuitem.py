@@ -4,12 +4,11 @@ from flask import (jsonify)
 import json
 
 # Get all of a restaurants menu items
-@app.route('/menuitems/<restaurant_id>/menu', methods=['GET'])
+@app.route('/menuitem/<restaurant_id>/menu', methods=['GET'])
 def api_get_restaurant_menu(restaurant_id):
     print("proc menuitems on rid: ", restaurant_id)
     conn, cursor = db_acq_lock()
     menuitems = []
-    # print("\n\n\nGIMME QUERRY\n\n\n")
     query = """SELECT mi.item_name, r.restaurant_id, mi.item_price, mi.item_desc, r.restaurant_name
                FROM Restaurant r JOIN MenuItem mi on r.restaurant_id = mi.restaurant_id
                WHERE r.restaurant_id = %s"""
@@ -27,25 +26,14 @@ def api_get_restaurant_menu(restaurant_id):
     db_rel_lock()
     return jsonify({'menuitems':menuitems})
 
-# Update a single order preference
-@app.route('/user/<user_id>/orders/<restaurant_id>+<item_name>', methods=['POST'])
-def api_update_order(user_id):
-    print("proc orders on uid: ", user_id)
-    conn, cursor = db_acq_lock()
-    
-    #update
-    
-    conn.commit() 
-    db_rel_lock()
-    return jsonify({'orders':orders})
-
 # Create a new order preference
-@app.route('/menuitem/<restaurant_id>+<item_name>+<item_price>+<item_description>', methods=['CREATE'])
-def api_create_order(restaurant_id, item_name, item_price, item_desc):
+@app.route('/menuitem/<restaurant_id>+<item_name>+<item_price>+<item_desc>', methods=['CREATE'])
+def api_create_menu_item(restaurant_id, item_name, item_price, item_desc):
+    # print("\n\n\nGIMME NEW MENU ITEM\n\n\n")
     conn, cursor = db_acq_lock()
     
     query = """INSERT INTO MenuItem (restaurant_id, item_name, item_price, item_desc)
-    VALUES (%s, %s, %f, %s)"""
+        VALUES (%s, %s, %s, %s)"""
     params = (restaurant_id, item_name, item_price, item_desc)
     cursor.execute(query, params)
     
@@ -56,7 +44,7 @@ def api_create_order(restaurant_id, item_name, item_price, item_desc):
 
 # Delete a new order preference
 @app.route('/menuitem/<restaurant_id>+<item_name>', methods=['DELETE'])
-def api_delete_order(restaurant_id, item_name):
+def api_delete_menu_item(restaurant_id, item_name):
     conn, cursor = db_acq_lock()
     
     query = """DELETE FROM MenuItem 
