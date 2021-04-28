@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>My Orders</title>
+    <script>
+      function getAllOrders() {
+        userid = {{user_id}}//document.getElementById('userid').value;
+        fetch('/user/'+userid+'/orders')
+          .then(response => response.json())
+          .then(data => fillOrdersList(userid, data.orders))
+      }
+
+      function fillOrdersList(userid, data) {
+        orderslist = document.getElementById('orderslist')
+        orderslist.innerHTML = ''
+        for(let i in data) {
+          if(data[i].notes === null) {
+            data[i].notes = '';
+          }
+          orderslist.innerHTML += `
+            <div>
+              <h3>${data[i].item_name} - ${data[i].restaurant_name}</h3>
+              <ul>
+                <li>Price: ${data[i].item_price}</li>
+                <li>Description: ${data[i].item_desc}</li>
+                <li>Notes: <textarea id="notesarea-${i}">${data[i].notes}</textarea></li>
+              </ul>
+              <button onclick="deleteOrderPref(${userid}, ${data[i].restaurant_id},  '${data[i].item_name}')">
+                Delete
+              </button>
+            <button onclick="updateOrderPref(${userid}, ${data[i].restaurant_id},  '${data[i].item_name}', ${i})">
+                Update Notes
+              </button>
+            </div>
+          `;
+        }
+      }
+      
+      function updateOrderPref(user_id, restaurant_id, item_name, i) {
+        notes = document.getElementById('notesarea-'+i).value;
+        fetch('/user/'+user_id+'/orders/'+restaurant_id+'+'+item_name, {
+          method: 'PUT',
+          body: notes
+        }).then(() => getAllOrders());
+      }
+
+      function deleteOrderPref(user_id, restaurant_id, item_name) {
+        fetch('/user/'+user_id+'/orders/'+restaurant_id+'+'+item_name, {
+          method: 'DELETE'
+        }).then(() => getAllOrders());
+      }
+
+      function createOrderPref() {
+        userid = {{user_id}};//document.getElementById('userid').value;
+        restaurantid = document.getElementById('restaurantid').value;
+        itemname = document.getElementById('itemname').value;
+        notes = document.getElementById('notes').value;
+        fetch('/user/'+userid+'/orders/'+restaurantid+'+'+itemname, {
+          method: 'CREATE',
+          body: notes
+        }).then(() => getAllOrders());
+      }
+      
+      //onload
+      window.onload = function() {
+        getAllOrders()
+      }
+    </script>
+</head>
+  <body>
+    <h1>{{user_id}}'s profile</h1>
+    <h2>User Information</h2>
+    <div id="orderslist">
+    
+    </div>
+    
+    <br>
+    <hr>
+    <br>
+    
+    <h2>Orders</h2>
+    <div id="orderslist">
+      
+    </div>
+
+    <br>
+    <hr>
+    <br>
+
+    <h3>Add new order preference</h3>
+    Restaurant ID: <input id="restaurantid" type="text">
+    Item Name: <input id="itemname" type="text">
+    Notes: <textarea id="notes"></textarea>
+    
+    <br>
+    <hr>
+    <br>
+    
+    <h2>Friends</h2>
+    <div id="friends">
+      
+    </div>
+
+    <br>
+    <hr>
+    <br>
+    
+    <h2>Feedback</h2>
+    <div id="feedback">
+      
+    </div>
+
+  </body>
+</html>
