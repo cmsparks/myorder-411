@@ -8,41 +8,14 @@
     <title>My Orders</title>
     <script>
       function getRestaurant() {
-        rid = document.getElementById('rid').value;
+        rid = {{restaurant_id}};
         fetch('/findRestaurant/'+rid)
           .then(response => response.json())
           .then(data => fillRInfo(data.restaurant))
       }
 
-      function advQuery() {
-        fetch('/advRestaurant')
-          .then(response => response.json())
-          .then(data => fillAdvQuery(data.data))
-      }
-
-      function fillAdvQuery(data) {
-        console.log(data)
-        body = document.getElementById("container");
-        listCont = document.createElement('ul');
-
-        for (i = 0; i < data["list"].length; i++) {
-          li = document.createElement("li");
-          li.innerHTML = "Restaurant " + data["list"][i]["rid"] + ": " + data["list"][i]["rnum"] + " review(s)."
-          listCont.appendChild(li);
-        }
-
-        body.appendChild(listCont);
-      }
-
-      function deleteRestaurant() {
-        rid = document.getElementById('drid').value;
-        fetch('/deleteRestaurant/'+rid, {
-          method: 'POST',
-        })
-      }
-
       function fillRInfo(data) {
-        orderslist = document.getElementById('rInfo')
+        orderslist = document.getElementById('restinfo')
         orderslist.innerHTML = ''
         for(let i in data) {
           orderslist.innerHTML += `
@@ -59,92 +32,100 @@
         }
       }
 
-      function makeRestaurant() {
-        crid = document.getElementById('crid').value;
-        rloc = document.getElementById('rloc').value;
-        rname = document.getElementById('rname').value;
-        rrate = document.getElementById('rrate').value;
-        rcuis = document.getElementById('rcuis').value;
-        rsite = document.getElementById('rsite').value;
-        data = {
-            "crid": crid,
-            "rloc": rloc,
-            "rname": rname,
-            "rrate": rrate,
-            "rcuis": rcuis,
-            "rsite": rsite
+      function getAllMenuItems() {
+        let restaurant_id = {{restaurant_id}};
+        
+        fetch('/menuitem/'+restaurant_id+'/menu')
+          .then(response => response.json())
+          .then(data => fillMenu(restaurant_id, data.menuitems))
+      }
+      
+      function fillMenu(restaurant_id, data) {
+        menu_list = document.getElementById('menuitems')
+        menu_list.innerHTML = `<h2>${data[0].restaurant_name}</h2>`
+        
+        for(let i in data) {
+          menu_list.innerHTML += `
+            <div>
+              <h3>${data[i].item_name}</h3>
+              <ul>
+                <li>Price: ${data[i].item_price}</li>
+                <li>Description: ${data[i].item_desc}</li>
+              </ul>
+              <button onclick="deleteMenuItem(${data[i].restaurant_id},  '${data[i].item_name}')">
+                Delete
+              </button>
+            </div>
+          `;
         }
-
-        fetch('/newRestaurant', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
+      }
+      
+      function deleteMenuItem(restaurant_id, item_name) {
+        fetch('/menuitem/'+restaurant_id+'+'+item_name, {
+          method: 'DELETE'
+        }).then(() => getAllMenuItems());
+      }
+      
+      function getAllFeedback() {
+        let restaurant_id = {{restaurant_id}};
+        
+        fetch('/findRestaurant/'+restaurant_id+'/feedback')
+          .then(response => response.json())
+          .then(data => fillFeedback(restaurant_id, data.feedback))
       }
 
-      function editRestaurant() {
-        crid = document.getElementById('erid').value;
-        rloc = document.getElementById('eloc').value;
-        rname = document.getElementById('ename').value;
-        rrate = document.getElementById('erate').value;
-        rcuis = document.getElementById('ecuis').value;
-        rsite = document.getElementById('esite').value;
-        data = {
-            "crid": crid,
-            "rloc": rloc,
-            "rname": rname,
-            "rrate": rrate,
-            "rcuis": rcuis,
-            "rsite": rsite
+      function fillFeedback(restaurant_id, data) {
+        feedback_list = document.getElementById('feedback')
+        feedback_list.innerHTML = `<h2>${data[0].restaurant_id}</h2>`
+        
+        for(let i in data) {
+          feedback_list.innerHTML += `
+            <div>
+              <h3>${data[i].user_id}</h3>
+              <ul>
+                <li>Comment: ${data[i].content}</li>
+                <li>Rating ${data[i].rating}</li>
+                <li>Time: ${data[i].timestamp}</li>
+              </ul>
+              <button onclick="deleteMenuItem(${data[i].restaurant_id},  '${data[i].item_name}')">
+                Delete
+              </button>
+            </div>
+          `;
         }
-
-        fetch('/editRestaurant', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
+      }
+      
+      window.onload = function() {
+        getRestaurant()
+        getAllMenuItems()
+        getAllFeedback()
       }
     </script>
 </head>
   <body id = "container">
-    <h1>My Orders</h1>
-    <h2>Find Restaurant</h2>
-    Restaurant ID: <input id="rid" type="text">
-    <button onclick="getRestaurant()">Get Restaurant Info</button>
-    <div id="rInfo">
+    <h1>Restaurant {{restaurant_id}}</h1>
+    <h2>Restaurant Information</h2>
+    <div id="restinfo">
+    
     </div>
-    <h2>Create New Restaurant</h1>
-    Restaurant ID: <input id="crid" type="text">
-    Restaurant Name: <input id="rname" type="text">
-    Restaurant Location: <input id="rloc" type="text">
-    Restaurant Rating: <input id="rrate" type="text">
-    Restaurant Website: <input id="rsite" type="text">
-    Restaurant Cuisine <input id="rcuis" type="text">
-
-    <button onclick="makeRestaurant()">Create</button>
-
-    <h2>Remove Restaurant</h1>
-    Restaurant ID: <input id="drid" type="text">
-    <button onclick="deleteRestaurant()">Delete</button>
-
-    <h2>Edit Restaurant</h1>
-      Restaurant ID to edit: <input id="erid" type="text">
-      New Name: <input id="ename" type="text">
-      New Location: <input id="eloc" type="text">
-      New Rating: <input id="erate" type="text">
-      New Website: <input id="esite" type="text">
-      New Cuisine: <input id="ecuis" type="text">
+    
+    <br>
+    <hr>
+    <br>
+    
+    <h2>Menu Items</h2>
+    <div id="menuitems">
+    
+    </div>
+    
+    <br>
+    <hr>
+    <br>
+    
+    <h2>Feedback</h2>
+    <div id="feedback">
+    
+    </div>
   
-    <button onclick="editRestaurant()">Edit</button>
-
-    <h2>Run Advanced Query</h2>
-    <button onclick="advQuery()">Advanced Query</button>
-    <h3>Restaurants with more than 3 stars and their review counts</h3>
-
-
   </body>
 </html>
