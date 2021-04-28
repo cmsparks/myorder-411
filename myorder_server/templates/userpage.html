@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#000000"/>
     <title>My Orders</title>
     <script>
+
       function getAllOrders() {
         userid = {{user_id}}//document.getElementById('userid').value;
         fetch('/user/'+userid+'/orders')
@@ -64,17 +65,47 @@
           body: notes
         }).then(() => getAllOrders());
       }
+
+      function getUserInfo() {
+        let id = {{user_id}}
+        fetch('/users/freinds/' + id)
+          .then(response => response.json())
+          .then(data => addFriendData(data))
+        return false;
+      }
+      
+      function addFriendData(data) {
+          var mainContainer = document.getElementById("userinfo");
+          var div = document.createElement("div");
+          div.innerHTML = 'ID: ' + data.users[0].user_id;
+          div.innerHTML += '<br>'
+          div.innerHTML += 'NAME: ' + data.users[0].full_name;
+          div.innerHTML += '<br>'
+          div.innerHTML += 'USERNAME: ' + data.users[0].username;
+          div.innerHTML += '<br>'
+          div.innerHTML += 'EMAIL: ' + data.users[0].email;
+          div.innerHTML += '<br>'
+          div.innerHTML += 'Tags: ' + data.users[0].tags;
+          div.innerHTML += '<br>'
+          mainContainer.appendChild(div);
+      }
+
+      function getUserFriends() {
+        
+      }
       
       //onload
       window.onload = function() {
+        getUserInfo()
         getAllOrders()
+        getUserFriends()
       }
     </script>
 </head>
   <body>
     <h1>{{user_id}}'s profile</h1>
     <h2>User Information</h2>
-    <div id="orderslist">
+    <div id="userinfo">
     
     </div>
     
@@ -100,7 +131,7 @@
     <hr>
     <br>
     
-    <h2>Friends</h2>
+    <!--<h2>Friends</h2>
     <div id="friends">
       
     </div>
@@ -112,7 +143,7 @@
     <h2>Feedback</h2>
     <div id="feedback">
       
-    </div>
+    </div>-->
 
   </body>
 </html>
