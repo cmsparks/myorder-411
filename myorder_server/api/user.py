@@ -86,3 +86,28 @@ def create_user(username, email, password, full_name, tags):
     conn.commit()
     db_rel_lock()
     return render_template("users.html", flask_token="tok")
+
+
+@app.route('/search/users/<search>', methods=['GET'])
+def search_user(search):
+    print(search)
+    conn, cursor = db_acq_lock()
+    res = cursor.execute("""
+                  SELECT * 
+                  FROM User u
+                  WHERE u.full_name LIKE "%"%s"%" 
+                  """, (search,))
+
+    users = []
+    for (user_id, username, email, password, full_name, tags) in cursor:
+        print(full_name)
+        users.append({
+                'user_id' : user_id,
+                'username' : username,
+                'email' : email,
+                'password' : password,
+                'full_name' : full_name, 
+                'tags' : tags
+        })
+    db_rel_lock()
+    return jsonify({'users' : users})

@@ -6,6 +6,7 @@ from flask import (render_template)
 
 @app.route('/stats/get', methods=['GET'])
 def getLocationRatings():
+    print("HELLO")
     conn, cursor = db_acq_lock()
     res = cursor.execute("""
                     SELECT Restaurant.location, AVG(Feedback.rating) as average_rating
