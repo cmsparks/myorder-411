@@ -14,7 +14,7 @@ def get_restaurantpage(restaurant_id):
     return render_template("restaurantpage.html", restaurant_id=restaurant_id)
 
 @app.route('/search', methods=['GET'])
-def get_search(restaurant_id):
+def get_search():
     return render_template("search.html")
 
 @app.route('/restaurant', methods=['GET'])
@@ -36,5 +36,4 @@ def get_stats():
 @app.route('/menuitem', methods=['GET'])
 def get_menu():
     return render_template("menuitem.html")
-
 from myorder_server.api import db, orders, restaurant, stats, user, menuitem

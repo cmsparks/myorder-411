@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>Stats</title>
+    <script type="text/javascript">
+        
+        function searchUser (userSearch) {
+            id = document.getElementById(userSearch).value;
+            console.log(id);
+              fetch('/search/users/' + id)
+              .then(response => response.json())
+              //Get call located at the bottom of user.py because search.py would not work
+            return false;
+        }
+
+        function searchRestaurant(restaurantSearch) {
+            id = document.getElementById(restaurantSearch).value;
+            console.log(id);
+              fetch('/search/restaurants/' + id)
+              .then(response => response.json())
+              //Get call located at the bottom of restuarant.py because search.py would not work
+            return false;
+        }
+
+    </script>
+</head>
+  <body>
+      <h1>Search</h1>
+      <style>
+        .column {
+          float: left;
+          width: 25%;
+        }
+      </style>
+
+    <div class="row">
+        <div class="entry foreground-color">
+            <h3>Search User</h3>
+            <form onsubmit="return searchUser('userSearch')">
+                <input type="text" name="userSearch" size="25" id="userSearch"/>
+            </form>
+        </div>
+        <div class="entry foreground-color">
+            <h3>Search Restaurant</h3>
+            <form onsubmit="return searchRestaurant('restaurantSearch')">
+                <input type="text" name="restaurantSearch" size="25" id="restaurantSearch"/>
+            </form>
+        </div>
+  
+  </body>
+</html>
+

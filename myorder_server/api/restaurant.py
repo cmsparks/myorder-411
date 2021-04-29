@@ -119,3 +119,27 @@ def advQueryRestaurant():
     return jsonify({'data':restaurants})
     print("done")
     return "Done!"
+
+
+@app.route('/search/restaurants/<search>', methods=['GET'])
+def search_restaurant(search):
+    print(search)
+    conn, cursor = db_acq_lock()
+    res = cursor.execute("""
+                  SELECT u.restaurant_name, u.location, u.rating, u.website, u.food_types
+                  FROM Restaurant u
+                  WHERE u.restaurant_name LIKE "%"%s"%" 
+                  """, (search,))
+
+    restaurants = []
+    for (restaurant_name, location, rating, website, food_types) in cursor:
+        print(restaurant_name)
+        restaurants.append({
+            'location': location,
+            'rating': rating,
+            'website': website,
+            'restaurant_name': restaurant_name,
+            'food_types': food_types
+        })
+    db_rel_lock()
+    return jsonify({'restaurant' : restaurants})
