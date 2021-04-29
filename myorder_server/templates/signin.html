@@ -1,0 +1,47 @@
+{% from "nav.html" import navbar with context %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>Stats</title>
+    <script type="text/javascript">
+        function login() {
+          let id = document.getElementById('loginform');
+          localStorage.setItem('uid', id.value);
+          document.getElementById('results').innerHTML = "Logged in as uid:"+id.value;
+          document.getElementById('pnav').href = "/user/"+localStorage.getItem('uid')
+        }
+
+        function logout() {
+          localStorage.removeItem('uid')
+          document.getElementById('results').innerHTML = "Logged out";
+          document.getElementById('pnav').href = "/login"
+        }
+    </script>
+</head>
+  <body>
+      {{ navbar() }}
+      <h1>Login</h1>
+      <style>
+        .column {
+          float: left;
+          width: 25%;
+        }
+      </style>
+
+    <div class="row">
+        <div class="entry foreground-color">
+            User ID: <input type="text" name="loginform" size="25" id="loginform"/>
+            <button onclick="login()">Login</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+        <div id="results">
+
+          
+        </div>
+  </body>
+</html>
+

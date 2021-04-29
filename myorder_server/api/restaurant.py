@@ -100,7 +100,7 @@ def getRestaurantFeedback(restaurant_id):
             "user_id": pair[1],
             "restaurant_id": pair[2],
             "timestamp": pair[3],
-            "rating": pair[4]
+            "rating": pair[4],
             "username": pair[5]
         })
 

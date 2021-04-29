@@ -56,11 +56,28 @@
               <button onclick="deleteMenuItem(${data[i].restaurant_id},  '${data[i].item_name}')">
                 Delete
               </button>
+              <li>Notes: <textarea id="notesarea-${i}">${data[i].notes}</textarea></li>
+            <button onclick="addOrderPref(${data[i].restaurant_id},  '${data[i].item_name}')">
+              Add Order Pref
+            </button>
             </div>
           `;
         }
       }
-      
+    
+      function addOrderPref(restaurant_id, item_name) {
+        userid = localStorage.getItem('uid');
+        if(userid == null) {
+          console.log("no uid")
+          return;
+        }
+        notes = document.getElementById('notes').value;
+        fetch('user/'+userid+'/orders/'+restaurant_id+'+'+item_name, {
+          method: 'CREATE',
+          body: notes
+        });
+      }
+
       function deleteMenuItem(restaurant_id, item_name) {
         fetch('/menuitem/'+restaurant_id+'+'+item_name, {
           method: 'DELETE'

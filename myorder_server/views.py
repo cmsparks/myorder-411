@@ -17,6 +17,10 @@ def get_restaurantpage(restaurant_id):
 def get_search():
     return render_template("search.html")
 
+@app.route('/login', methods=['GET'])
+def get_signin():
+    return render_template("signin.html")
+
 @app.route('/restaurant', methods=['GET'])
 def serve_rest_index():
     return render_template("restaurant.html")

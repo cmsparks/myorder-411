@@ -1,3 +1,4 @@
+{% from "nav.html" import navbar with context %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -43,7 +44,6 @@
                 <h3><a href="/user/${data[i].user_id}">${data[i].username}</a></h3>
                   <ul>
                     <li>Name: ${data[i].full_name}</li>
-                    <li>Rating: ${data[i].rating}</li>
                     <li>Tags: ${data[i].tags}</li>
                   </ul>
                 </div>
@@ -54,6 +54,7 @@
     </script>
 </head>
   <body>
+      {{ navbar() }}
       <h1>Search</h1>
       <style>
         .column {

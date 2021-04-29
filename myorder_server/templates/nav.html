@@ -1,8 +1,12 @@
 {% macro navbar() -%}
   <nav>
     <a href="/search">Search</a>
-    <a href="">Create Restaurant</a>
-    <a href="">Sign up</a>
-    <a href="">Profile/Login</a>
+    <a href="/create">Create Restaurant</a>
+    <a href="/signup">Sign up</a>
+    <a href="/login">Login/Logout</a>
+    <a id="pnav" href="/user/id">Profile</a>
   </nav>
+  <script>
+    document.getElementById('pnav').href = "/user/"+localStorage.getItem('uid')
+  </script>
 {%- endmacro %}
