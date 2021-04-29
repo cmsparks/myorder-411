@@ -83,8 +83,8 @@ def getRestaurantFeedback(restaurant_id):
     conn, mycursor = db_acq_lock()
     # print(data)
     query = """
-                SELECT *
-                FROM Feedback 
+                SELECT f.content, f.user_id, f.restaurant_id, f.timestamp, f.rating, u.username
+                FROM Feedback f NATURAL JOIN Users u
                 WHERE restaurant_id = %s
             """
     params = (restaurant_id, )
@@ -101,6 +101,7 @@ def getRestaurantFeedback(restaurant_id):
             "restaurant_id": pair[2],
             "timestamp": pair[3],
             "rating": pair[4]
+            "username": pair[5]
         })
 
     db_rel_lock()
@@ -155,15 +156,16 @@ def search_restaurant(search):
     print(search)
     conn, cursor = db_acq_lock()
     res = cursor.execute("""
-                  SELECT u.restaurant_name, u.location, u.rating, u.website, u.food_types
+                  SELECT u.restaurant_id, u.restaurant_name, u.location, u.rating, u.website, u.food_types
                   FROM Restaurant u
                   WHERE u.restaurant_name LIKE "%"%s"%" 
                   """, (search,))
 
     restaurants = []
-    for (restaurant_name, location, rating, website, food_types) in cursor:
+    for (rid, restaurant_name, location, rating, website, food_types) in cursor:
         print(restaurant_name)
         restaurants.append({
+            'restaurant_id': rid,
             'location': location,
             'rating': rating,
             'website': website,

@@ -7,25 +7,50 @@
     <meta name="theme-color" content="#000000"/>
     <title>Stats</title>
     <script type="text/javascript">
-        
-        function searchUser (userSearch) {
-            id = document.getElementById(userSearch).value;
-            console.log(id);
-              fetch('/search/users/' + id)
-              .then(response => response.json())
-              //Get call located at the bottom of user.py because search.py would not work
-            return false;
+        function search() {
+          let id = document.getElementById('searchbar').value;
+          let type = document.getElementById('searchselect').value;
+          fetch('/search/'+type+'/'+ id)
+            .then(response => response.json())
+            .then(data => fillResults(type, data))
         }
+  
+        function fillResults(type, data) {
+          console.log(data)
+          let results = document.getElementById('searchresults')
+          results.innerHTML = '<h2>Results</h2>'
 
-        function searchRestaurant(restaurantSearch) {
-            id = document.getElementById(restaurantSearch).value;
-            console.log(id);
-              fetch('/search/restaurants/' + id)
-              .then(response => response.json())
-              //Get call located at the bottom of restuarant.py because search.py would not work
-            return false;
+          if(type == 'restaurants') {
+            data = data['restaurant']
+            for(let i in data) {
+              results.innerHTML += `
+                <div>
+                <h3><a href="/restaurant/${data[i].restaurant_id}">${data[i].restaurant_name}</a></h3>
+                  <ul>
+                    <li>Location: ${data[i].location}</li>
+                    <li>Rating: ${data[i].rating}</li>
+                    <li>Cuisine: ${data[i].food_types}</li>
+                    <li>Website: ${data[i].website}</li>
+                  </ul>
+                </div>
+              `;
+            }
+          } else if(type == 'users') {
+            data = data['users']
+            for(let i in data) {
+              results.innerHTML += `
+                <div>
+                <h3><a href="/user/${data[i].user_id}">${data[i].username}</a></h3>
+                  <ul>
+                    <li>Name: ${data[i].full_name}</li>
+                    <li>Rating: ${data[i].rating}</li>
+                    <li>Tags: ${data[i].tags}</li>
+                  </ul>
+                </div>
+              `;
+            }
+          }
         }
-
     </script>
 </head>
   <body>
@@ -39,18 +64,16 @@
 
     <div class="row">
         <div class="entry foreground-color">
-            <h3>Search User</h3>
-            <form onsubmit="return searchUser('userSearch')">
-                <input type="text" name="userSearch" size="25" id="userSearch"/>
-            </form>
+            <input type="text" name="searchbar" size="25" id="searchbar"/>
+            <select name="searchselect" id="searchselect">
+              <option value="users">Users</option>
+              <option value="restaurants">Restaurant</option>
+            </select>
+            <button onclick="search()">Search</button>
         </div>
-        <div class="entry foreground-color">
-            <h3>Search Restaurant</h3>
-            <form onsubmit="return searchRestaurant('restaurantSearch')">
-                <input type="text" name="restaurantSearch" size="25" id="restaurantSearch"/>
-            </form>
+        <div id="searchresults">
+
         </div>
-  
   </body>
 </html>
 

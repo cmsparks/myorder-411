@@ -1,3 +1,4 @@
+{% from "nav.html" import navbar with context %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -81,11 +82,10 @@
         for(let i in data) {
           feedback_list.innerHTML += `
             <div>
-              <h3>${data[i].user_id}</h3>
+            <h4>${data[i].username} - ${data[i].timestamp} </h4>
               <ul>
-                <li>Comment: ${data[i].content}</li>
                 <li>Rating ${data[i].rating}</li>
-                <li>Time: ${data[i].timestamp}</li>
+                <li>Comment: ${data[i].content}</li>
               </ul>
               <button onclick="deleteMenuItem(${data[i].restaurant_id},  '${data[i].item_name}')">
                 Delete
