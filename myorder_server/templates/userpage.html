@@ -1,3 +1,4 @@
+{% from "nav.html" import navbar with context %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -103,6 +104,9 @@
     </script>
 </head>
   <body>
+    
+    {{ navbar() }}
+
     <h1>{{user_id}}'s profile</h1>
     <h2>User Information</h2>
     <div id="userinfo">
