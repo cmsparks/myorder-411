@@ -78,6 +78,35 @@ def editRestaurant():
     print("done")
     return "Done!"
 
+@app.route('/findRestaurant/<restaurant_id>/feedback', methods=['GET'])
+def getRestaurantFeedback(restaurant_id):
+    conn, mycursor = db_acq_lock()
+    # print(data)
+    query = """
+                SELECT *
+                FROM Feedback 
+                WHERE restaurant_id = %s
+            """
+    params = (restaurant_id, )
+    mycursor.execute(query, params)
+
+    feedback = {
+        "feedback": []
+    }
+    
+    for pair in mycursor:
+        feedback["feedback"].append({
+            "content": pair[0],
+            "user_id": pair[1],
+            "restaurant_id": pair[2],
+            "timestamp": pair[3],
+            "rating": pair[4]
+        })
+
+    db_rel_lock()
+    return jsonify(feedback)
+
+
 @app.route('/advRestaurant', methods=['GET'])
 def advQueryRestaurant():
     conn, mycursor = db_acq_lock()
