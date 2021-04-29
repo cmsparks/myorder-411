@@ -69,30 +69,40 @@
 
       function getUserInfo() {
         let id = {{user_id}}
-        fetch('/users/freinds/' + id)
+        fetch('/users/' + id)
           .then(response => response.json())
-          .then(data => addFriendData(data))
+          .then(data => addFriendData(data.users[0], "userinfo", false))
         return false;
       }
       
-      function addFriendData(data) {
-          var mainContainer = document.getElementById("userinfo");
+      function addFriendData(d, elem, fbox) {
+          var mainContainer = document.getElementById(elem);
           var div = document.createElement("div");
-          div.innerHTML = 'ID: ' + data.users[0].user_id;
-          div.innerHTML += '<br>'
-          div.innerHTML += 'NAME: ' + data.users[0].full_name;
-          div.innerHTML += '<br>'
-          div.innerHTML += 'USERNAME: ' + data.users[0].username;
-          div.innerHTML += '<br>'
-          div.innerHTML += 'EMAIL: ' + data.users[0].email;
-          div.innerHTML += '<br>'
-          div.innerHTML += 'Tags: ' + data.users[0].tags;
-          div.innerHTML += '<br>'
+
+          div.innerHTML = `
+              <h3>${d.full_name} - ${d.username}</h3>
+              <ul>
+                <li>User ID: ${d.user_id}</li>
+                <li>Description: ${d.email}</li>
+                <li>Tags: ${d.tags}</li>
+              </ul>
+          `
+          if(fbox) {
+            div.innerHTML += `<button onclick="console.log("revmoe f")')">
+                Remove Friend
+              </button>`
+ 
+          }
+
           mainContainer.appendChild(div);
       }
 
       function getUserFriends() {
-        
+        let id = {{user_id}}
+        fetch('/users/' + id + '/friends')
+          .then(response => response.json())
+          .then(data => data.friends.map(d => addFriendData(d, "friends", true)))
+        return false;
       }
       
       //onload
@@ -133,7 +143,7 @@
     
     <br>
     <hr>
-    <br>
+    <br>-->
     
     <h2>Friends</h2>
     <div id="friends">
@@ -144,7 +154,7 @@
     <hr>
     <br>
     
-    <h2>Feedback</h2>
+    <!--<h2>Feedback</h2>
     <div id="feedback">
       
     </div>-->

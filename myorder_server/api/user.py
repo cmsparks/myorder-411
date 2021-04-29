@@ -4,7 +4,7 @@ from flask import (jsonify)
 import json
 from flask import (render_template)
 
-@app.route('/users/freinds/<user_id>', methods=['GET'])
+@app.route('/users/<user_id>', methods=['GET'])
 def get_user_data(user_id):
     conn, cursor = db_acq_lock()
     res = cursor.execute("""
@@ -87,6 +87,30 @@ def create_user(username, email, password, full_name, tags):
     db_rel_lock()
     return render_template("users.html", flask_token="tok")
 
+@app.route('/users/<user_id>/friends', methods=['GET'])
+def get_friends(user_id):
+    conn, cursor = db_acq_lock()
+    res = cursor.execute("""
+        SELECT u.*
+        from (SELECT user_id_2 as uid FROM Friends WHERE user_id_1 = %s
+        UNION
+        SELECT user_id_1 as uid FROM Friends WHERE user_id_2 = %s) as f JOIN User u ON u.user_id = f.uid;
+                  """, (user_id, user_id))
+
+    friends = []
+    for (user_id, username, email, password, full_name, tags) in cursor:
+        print(full_name)
+        friends.append({
+                'user_id' : user_id,
+                'username' : username,
+                'email' : email,
+                'password' : password,
+                'full_name' : full_name, 
+                'tags' : tags
+        })
+    db_rel_lock()
+
+    return jsonify({'friends': friends})
 
 @app.route('/search/users/<search>', methods=['GET'])
 def search_user(search):

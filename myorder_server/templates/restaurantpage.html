@@ -72,7 +72,7 @@
           return;
         }
         notes = document.getElementById('notes').value;
-        fetch('user/'+userid+'/orders/'+restaurant_id+'+'+item_name, {
+        fetch('/user/'+userid+'/orders/'+restaurant_id+'+'+item_name, {
           method: 'CREATE',
           body: notes
         });

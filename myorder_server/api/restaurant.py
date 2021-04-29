@@ -84,7 +84,7 @@ def getRestaurantFeedback(restaurant_id):
     # print(data)
     query = """
                 SELECT f.content, f.user_id, f.restaurant_id, f.timestamp, f.rating, u.username
-                FROM Feedback f NATURAL JOIN Users u
+                FROM Feedback f NATURAL JOIN User u
                 WHERE restaurant_id = %s
             """
     params = (restaurant_id, )
