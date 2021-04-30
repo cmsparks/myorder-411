@@ -40,4 +40,9 @@ def get_stats():
 @app.route('/menuitem', methods=['GET'])
 def get_menu():
     return render_template("menuitem.html")
-from myorder_server.api import db, orders, restaurant, stats, user, menuitem
+
+@app.route('/feedback', methods=['GET'])
+def get_feedback():
+    return render_template("feedback-create.html")
+
+from myorder_server.api import db, orders, restaurant, stats, user, menuitem, feedback
