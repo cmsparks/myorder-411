@@ -45,4 +45,8 @@ def get_menu():
 def get_feedback():
     return render_template("feedback-create.html")
 
+@app.route('/user-create', methods=['GET'])
+def get_user_create():
+    return render_template("user-create.html")
+
 from myorder_server.api import db, orders, restaurant, stats, user, menuitem, feedback

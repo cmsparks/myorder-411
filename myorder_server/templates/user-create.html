@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/static/react/favicon.ico"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>User</title>
+    <script type="text/javascript">
+        var UID = 0;
+        var user_attributes = []
+        var attribute_index = 0
+        var user_prompts = ["username", "email", "password", "name", "tags"]
+        
+        function createUser() {
+            console.log("IN Create User");
+            fetch('/users/create/' + user_attributes[0] + '/' + user_attributes[1] + '/' + user_attributes[2] + '/' + user_attributes[3] + '/' + user_attributes[4], {method:'POST'})
+              .then(response => response.json())
+            return false;
+        }
+
+        function update_new_user_info(info) {
+          console.log("UPDATING INFO")
+          attribute_index += 1
+          inf = document.getElementById(info).value;
+          var mainContainer = document.getElementById("user_attributes");
+          var div = document.createElement("div");
+          div.innerHTML = user_prompts[attribute_index];
+          mainContainer.appendChild(div);
+          console.log(inf)
+          user_attributes.push(inf)
+          return false;
+        }
+    </script>
+</head>
+  <body>
+    <h1>User Create</h1>
+
+    <div></div>
+    Username: <input id="username" type="text">
+    Email: <input id="email" type="text">
+    Password: <input id="password" type="text">
+    Full Name: <input id="full_name" type="text">
+    Tags: <input id="tags" type="text">
+    <button onclick="createUser()">Create User</button>
+    
+    <div></div>
+  
+  </body>
+</html>
