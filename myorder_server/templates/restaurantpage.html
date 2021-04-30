@@ -115,7 +115,7 @@
                 <li>Rating ${data[i].rating}</li>
                 <li>Comment: ${data[i].content}</li>
               </ul>
-              <button onclick="deleteFeedback('${data[i].test}')">
+            <button onclick="deleteFeedback('${data[i].restaurant_id}', '${data[i].user_id}')">
                 Delete
               </button>
             </div>
@@ -123,12 +123,22 @@
         }
       }
       
-      function deleteFeedback() {
-      
+      function deleteFeedback(rid, uid) {
+        let restaurant_id = rid;
+        let user_id = uid;
+        fetch('feedback/'+restaurant_id+'+'+user_id, {
+          method: 'DELETE',
+        }).then(() => getAllFeedback());
       }
 
       function createFeedback() {
-      
+        let restaurant_id = {{restaurant_id}}
+        let user_id = localStorage.getItem('uid')
+        let content = document.getElementById('comment').value;
+        let rating = document.getElementById('rating').value;
+        fetch('feedback/'+restaurant_id+'+'+user_id+'+'+content+'+'+rating, {
+          method: 'CREATE',
+        }).then(() => getAllFeedback());
       }
 
       window.onload = function() {

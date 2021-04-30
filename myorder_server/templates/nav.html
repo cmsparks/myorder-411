@@ -1,13 +1,101 @@
 {% macro navbar() -%}
-  <nav>
-    <a href="/">Home</a>
-    <a href="/search">Search</a>
-    <a href="/create">Create Restaurant</a>
-    <a href="/signup">Sign up</a>
-    <a href="/login">Login/Logout</a>
-    <a id="pnav" href="/user/id">Profile</a>
-  </nav>
-  <script>
-    document.getElementById('pnav').href = "/user/"+localStorage.getItem('uid')
-  </script>
+<style>
+body {
+  font-family: 'Avenir', 'Helvetica', sans-serif;
+  width: 66vw;
+  margin: 0 auto;
+  margin-top: 60px;
+}
+
+nav > a {
+  margin-right: 30px;
+}
+
+/*SEARHC*/
+
+#searchbar, #loginform {
+  border: none;
+  box-shadow: 0px 0px 3px 0px #777 inset;
+  border-radius: 5px;
+  margin: 2px;
+  padding: 10px;
+  font-size: 20px;
+  width: 40vw;
+}
+
+#searchselect {
+  border: none;
+  box-shadow: 0px 0px 3px 0px #777 inset;
+  border-radius: 5px;
+  margin: 2px;
+  padding: 12px;
+  font-size: 20px;
+}
+
+button {
+  border: none;
+  background-color: #9999ff;
+  color: white;
+  box-shadow: 0px 5px 0px 0px #5555ff;
+  border-radius: 5px;
+  margin: 2px;
+  margin-top: 2px;
+  padding: 10px;
+  font-size: 20px;
+  transition: all 0.1s ease 0s;
+}
+
+button:hover {
+  background-color: #6666ff;
+}
+
+button:active {
+  position:relative;
+  top: 4px;
+  box-shadow: 0px 0px 0px 0px #5555ff;
+}
+
+#searchresults > div {
+  border-radius: 5px;
+  margin: 30px 15px;
+  padding: 10px;
+  box-shadow: 0px 0px 3px 0px #777;
+}
+
+/*USERS*/
+#userinfo > div {
+  border-radius: 5px;
+  margin: 30px 15px;
+  padding: 10px;
+  box-shadow: 0px 0px 3px 0px #777;
+
+}
+
+#orderslist > div {
+  border-radius: 5px;
+  margin: 30px 15px;
+  padding: 10px;
+  box-shadow: 0px 0px 3px 0px #777;
+
+}
+
+#friends > div {
+  border-radius: 5px;
+  margin: 30px 15px;
+  padding: 10px;
+  box-shadow: 0px 0px 3px 0px #777;
+
+}
+</style>
+<nav>
+  <a href="/">Home</a>
+  <a href="/search">Search</a>
+  <a href="/create">Create Restaurant</a>
+  <a href="/signup">Sign up</a>
+  <a href="/login">Login/Logout</a>
+  <a id="pnav" href="/user/id">Profile</a>
+</nav>
+<script>
+  document.getElementById('pnav').href = "/user/"+localStorage.getItem('uid')
+</script>
 {%- endmacro %}

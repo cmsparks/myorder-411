@@ -117,6 +117,14 @@
         }).then(() => getUserFriends());
       }
       
+      function addUserFriend() {
+        let id = {{user_id}}
+        let fid = localStorage.getItem('uid')
+        fetch('/users/'+id+'/friends/'+fid, {
+          method: 'CREATE'
+        }).then(() => getUserFriends());
+      }
+
       //onload
       window.onload = function() {
         getUserInfo()
@@ -134,7 +142,7 @@
     <div id="userinfo">
     
     </div>
-    <button onclick="">Add Friend</button>
+    <button onclick="addUserFriend()">Add Friend</button>
     
     <br>
     <hr>

@@ -129,6 +129,19 @@ def delete_friend(user_id, fid):
     db_rel_lock()
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
+@app.route('/users/<user_id>/friends/<fid>', methods=['CREATE'])
+def create_friend(user_id, fid):
+    print("Reached User Delete in app.py with id: " + user_id)
+    conn, cursor = db_acq_lock()
+    print("CREATING USER: " + user_id)
+
+    res = cursor.execute("""  
+                        INSERT INTO Friends (user_id_1, user_id_2) VALUES (%s, %s)
+                         """, (user_id, fid))
+    conn.commit()
+    db_rel_lock()
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
 @app.route('/search/users/<search>', methods=['GET'])
 def search_user(search):
     print(search)
