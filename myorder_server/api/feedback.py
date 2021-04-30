@@ -12,6 +12,8 @@ def api_create_feedback(restaurant_id, user_id, content, rating):
         VALUES (%s, %s, %s, %s, %s)"""
     params = (restaurant_id, user_id, "2015-12-20 10:01:00.999999", content, rating)
     cursor.execute(query, params)
+<<<<<<< HEAD
+=======
 
     conn.commit() 
     db_rel_lock()
@@ -27,6 +29,7 @@ def api_delete_feedback(restaurant_id, user_id):
         restaurant_id = %s AND user_id = %s"""
     params = (restaurant_id, user_id)
     cursor.execute(query, params)
+>>>>>>> cd61f300d40a5cb57816fb75b8709278ff72c932
 
     conn.commit() 
     db_rel_lock()
