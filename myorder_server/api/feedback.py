@@ -12,15 +12,21 @@ def api_create_feedback(restaurant_id, user_id, content, rating):
         VALUES (%s, %s, %s, %s, %s)"""
     params = (restaurant_id, user_id, 0, content, rating)
     cursor.execute(query, params)
+
+    conn.commit() 
+    db_rel_lock()
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+# Delete a feedback
+@app.route('/feedback/<restaurant_id>+<user_id>', methods=['DELETE'])
+def api_delete_feedback(restaurant_id, user_id):
+    conn, cursor = db_acq_lock()
     
-    cursor.execute("""DELIMITER $$
-                    CREATE TRIGGER after_new_feedback
-                    AFTER INSERT
-                    ON Feedback
-                    BEGIN
-                        CALL one_data.NewProc();
-                    END
-                    $$""")
+    query = """DELETE FROM Feedback WHERE 
+        restaurant_id = %s AND user_id = %s"""
+    params = (restaurant_id, user_id)
+    cursor.execute(query, params)
 
     conn.commit() 
     db_rel_lock()

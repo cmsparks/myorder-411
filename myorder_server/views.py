@@ -21,6 +21,10 @@ def get_search():
 def get_signin():
     return render_template("signin.html")
 
+@app.route('/signup', methods=['GET'])
+def get_signup():
+    return render_template("user-create.html")
+
 @app.route('/restaurant', methods=['GET'])
 def serve_rest_index():
     return render_template("restaurant.html")
