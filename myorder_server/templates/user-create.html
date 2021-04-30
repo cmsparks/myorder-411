@@ -15,22 +15,14 @@
         
         function createUser() {
             console.log("IN Create User");
-            fetch('/users/create/' + user_attributes[0] + '/' + user_attributes[1] + '/' + user_attributes[2] + '/' + user_attributes[3] + '/' + user_attributes[4], {method:'POST'})
-              .then(response => response.json())
-            return false;
-        }
 
-        function update_new_user_info(info) {
-          console.log("UPDATING INFO")
-          attribute_index += 1
-          inf = document.getElementById(info).value;
-          var mainContainer = document.getElementById("user_attributes");
-          var div = document.createElement("div");
-          div.innerHTML = user_prompts[attribute_index];
-          mainContainer.appendChild(div);
-          console.log(inf)
-          user_attributes.push(inf)
-          return false;
+            user_attributes = [document.getElementById('username').value,
+            document.getElementById('email').value,
+            document.getElementById('password').value,
+            document.getElementById('full_name').value,
+            document.getElementById('tags').value]
+
+            fetch('/users/create/' + user_attributes[0] + '/' + user_attributes[1] + '/' + user_attributes[2] + '/' + user_attributes[3] + '/' + user_attributes[4], {method:'POST'})
         }
     </script>
 </head>
