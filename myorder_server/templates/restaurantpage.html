@@ -57,7 +57,7 @@
                 Delete
               </button>
             <ul><li>Notes: <textarea id="notesarea-${i}"></textarea></li></ul>
-            <button onclick="addOrderPref(${data[i].restaurant_id},  '${data[i].item_name}')">
+            <button onclick="addOrderPref(${i}, '${data[i].restaurant_id}',  '${data[i].item_name}')">
               Add Order Pref
             </button>
             </div>
@@ -65,13 +65,13 @@
         }
       }
     
-      function addOrderPref(restaurant_id, item_name) {
-        userid = localStorage.getItem('uid');
+      function addOrderPref(i, restaurant_id, item_name) {
+        let userid = localStorage.getItem('uid');
         if(userid == null) {
           console.log("no uid")
           return;
         }
-        notes = document.getElementById('notes').value;
+        notes = document.getElementById('notesarea-'+i).value;
         fetch('/user/'+userid+'/orders/'+restaurant_id+'+'+item_name, {
           method: 'CREATE',
           body: notes

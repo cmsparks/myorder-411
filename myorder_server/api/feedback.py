@@ -10,7 +10,7 @@ def api_create_feedback(restaurant_id, user_id, content, rating):
     
     query = """INSERT INTO Feedback (restaurant_id, user_id, timestamp, content, rating)
         VALUES (%s, %s, %s, %s, %s)"""
-    params = (restaurant_id, user_id, "2015-12-20 10:01:00.999999", content, rating)
+    params = (restaurant_id, user_id,  "9999-12-31 23:59:59", content, rating)
     cursor.execute(query, params)
 
     conn.commit() 
