@@ -88,9 +88,11 @@
               </ul>
           `
           if(fbox) {
-            div.innerHTML += `<button onclick="console.log("revmoe f")')">
+            div.innerHTML += `
+              <button onclick="removeUserFriend(${d.user_id})">
                 Remove Friend
-              </button>`
+              </button>
+            `
  
           }
 
@@ -101,8 +103,18 @@
         let id = {{user_id}}
         fetch('/users/' + id + '/friends')
           .then(response => response.json())
-          .then(data => data.friends.map(d => addFriendData(d, "friends", true)))
-        return false;
+          .then(data => {
+            var mainContainer = document.getElementById("friends");
+            mainContainer.innerHTML = "";
+            data.friends.map(d => addFriendData(d, "friends", true))
+          })
+      }
+
+      function removeUserFriend(fid) {
+        let id = {{user_id}}
+        fetch('/users/'+id+'/friends/'+fid, {
+          method: 'DELETE'
+        }).then(() => getUserFriends());
       }
       
       //onload
@@ -122,6 +134,7 @@
     <div id="userinfo">
     
     </div>
+    <button onclick="">Add Friend</button>
     
     <br>
     <hr>

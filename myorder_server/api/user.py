@@ -112,6 +112,23 @@ def get_friends(user_id):
 
     return jsonify({'friends': friends})
 
+
+@app.route('/users/<user_id>/friends/<fid>', methods=['DELETE'])
+def delete_friend(user_id, fid):
+    print("Reached User Delete in app.py with id: " + user_id)
+    conn, cursor = db_acq_lock()
+    print("DELETING USER: " + user_id)
+
+    res = cursor.execute("""  
+                        DELETE
+                        FROM Friends
+                        WHERE (user_id_1 = %s AND user_id_2 = %s) OR
+                        (user_id_1 = %s AND user_id_2 = %s)
+                         """, (user_id, fid, fid, user_id))
+    conn.commit()
+    db_rel_lock()
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
 @app.route('/search/users/<search>', methods=['GET'])
 def search_user(search):
     print(search)
