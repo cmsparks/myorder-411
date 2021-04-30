@@ -35,15 +35,31 @@
     </script>
 </head>
   <body>
+    <style>
+input {
+  border: none;
+  box-shadow: 0px 0px 3px 0px #777 inset;
+  border-radius: 5px;
+  margin: 2px;
+  padding: 10px;
+  font-size: 20px;
+  width: 40vw;
+}
+    </style>
     {{navbar()}}
     <h1>User Create</h1>
 
-    <div></div>
+    <br>
     Username: <input id="username" type="text">
+    <br>
     Email: <input id="email" type="text">
+    <br>
     Password: <input id="password" type="text">
+    <br>
     Full Name: <input id="full_name" type="text">
+    <br>
     Tags: <input id="tags" type="text">
+    <br>
     <button onclick="createUser()">Create User</button>
     
     <div></div>

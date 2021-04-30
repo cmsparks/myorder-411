@@ -84,18 +84,16 @@ def getRestaurantFeedback(restaurant_id):
     # print(data)
     query = """
                 SELECT f.content, f.user_id, f.restaurant_id, f.timestamp, f.rating, u.username
-                FROM Feedback f NATURAL JOIN User u
+                FROM Feedback f JOIN User u ON u.user_id = f.user_id
                 WHERE restaurant_id = %s
             """
     params = (restaurant_id, )
     mycursor.execute(query, params)
 
-    feedback = {
-        "feedback": []
-    }
+    feedback = []
     
     for pair in mycursor:
-        feedback["feedback"].append({
+        feedback.append({
             "content": pair[0],
             "user_id": pair[1],
             "restaurant_id": pair[2],
@@ -105,7 +103,7 @@ def getRestaurantFeedback(restaurant_id):
         })
 
     db_rel_lock()
-    return jsonify(feedback)
+    return jsonify({"feedback": feedback})
 
 
 @app.route('/advRestaurant', methods=['GET'])
