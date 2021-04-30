@@ -25,7 +25,7 @@
               <ul>
                 <li>Location: ${data[i].location}</li>
                 <li>Rating: ${data[i].rating}</li>
-                <li>Cuisine: ${data[i].food_types}</li>
+                <li>Activity: ${data[i].food_types}</li>
                 <li>Website: ${data[i].website}</li>
               </ul>
             </div>
@@ -56,7 +56,7 @@
               <button onclick="deleteMenuItem(${data[i].restaurant_id},  '${data[i].item_name}')">
                 Delete
               </button>
-              <li>Notes: <textarea id="notesarea-${i}">${data[i].notes}</textarea></li>
+              <li>Notes: <textarea id="notesarea-${i}"></textarea></li>
             <button onclick="addOrderPref(${data[i].restaurant_id},  '${data[i].item_name}')">
               Add Order Pref
             </button>
@@ -83,6 +83,16 @@
           method: 'DELETE'
         }).then(() => getAllMenuItems());
       }
+
+      function createMenuItem() {
+        let restaurant_id = {{restaurant_id}}
+        let itemname = document.getElementById('itemname').value;
+        let itemprice = document.getElementById('itemprice').value;
+        let itemdescription = document.getElementById('itemdescription').value;
+        fetch('/menuitem/'+restaurant_id+'+'+itemname+'+'+itemprice+'+'+itemdescription, {
+          method: 'CREATE',
+        }).then(() => getAllMenuItems());
+      }
       
       function getAllFeedback() {
         let restaurant_id = {{restaurant_id}};
@@ -93,6 +103,7 @@
       }
 
       function fillFeedback(restaurant_id, data) {
+        console.log(data)
         feedback_list = document.getElementById('feedback')
         feedback_list.innerHTML = `<h2>${data[0].restaurant_id}</h2>`
         
@@ -104,7 +115,7 @@
                 <li>Rating ${data[i].rating}</li>
                 <li>Comment: ${data[i].content}</li>
               </ul>
-              <button onclick="deleteMenuItem(${data[i].restaurant_id},  '${data[i].item_name}')">
+              <button onclick="deleteFeedback('${data[i].test}')">
                 Delete
               </button>
             </div>
@@ -112,6 +123,14 @@
         }
       }
       
+      function deleteFeedback() {
+      
+      }
+
+      function createFeedback() {
+      
+      }
+
       window.onload = function() {
         getRestaurant()
         getAllMenuItems()
@@ -136,15 +155,31 @@
     <div id="menuitems">
     
     </div>
+    <br>
+    <div>
+      <h3>Add new menuitem:</h3>
+      Item Name: <input id="itemname">
+      Price: <input type="number" id="itemprice">
+      <textarea id="itemdescription"></textarea>
+      <button onclick="createMenuItem()">Add Menuitem</button>
+    </div>
     
     <br>
     <hr>
     <br>
     
     <h2>Feedback</h2>
+    <div>
+      <h3>Add new feedback:</h3>
+      Rating: <input type="number" id="rating">
+      <textarea id="comment"></textarea>
+      <button onclick="addFeedback()">Add Feedback</button>
+    </div>
+    <br>
     <div id="feedback">
     
     </div>
+
   
   </body>
 </html>
