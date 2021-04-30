@@ -12,15 +12,6 @@ def api_create_feedback(restaurant_id, user_id, content, rating):
         VALUES (%s, %s, %s, %s, %s)"""
     params = (restaurant_id, user_id, 0, content, rating)
     cursor.execute(query, params)
-    
-    cursor.execute("""DELIMITER $$
-                    CREATE TRIGGER after_new_feedback
-                    AFTER INSERT
-                    ON Feedback
-                    BEGIN
-                        CALL one_data.NewProc();
-                    END
-                    $$""")
 
     conn.commit() 
     db_rel_lock()
